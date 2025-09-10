@@ -23,9 +23,9 @@ export interface ThingSpeakResponse {
     field1: string; // soil moisture
     field2: string; // temperature
     field3: string; // humidity
-    field4: string; // nitrogen (N)
-    field5: string; // phosphorus (P)
-    field6: string; // potassium (K)
+    field5: string; // nitrogen (N)
+    field6: string; // phosphorus (P)
+    field7: string; // potassium (K)
   }>;
 }
 
@@ -321,3 +321,4 @@ export async function fetchCurrentNPK(): Promise<{
     throw error;
   }
 }
+
