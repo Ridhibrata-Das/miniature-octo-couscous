@@ -269,9 +269,9 @@ export async function fetchNPKData(timeRange: string = '24h'): Promise<NPKData[]
     }
 
     const processedData = data.feeds.map(feed => ({
-      nitrogen: parseNumericValue(feed.field4),
-      phosphorus: parseNumericValue(feed.field5),
-      potassium: parseNumericValue(feed.field6),
+      nitrogen: parseNumericValue(feed.field5),
+      phosphorus: parseNumericValue(feed.field6),
+      potassium: parseNumericValue(feed.field7),
       time: new Date(feed.created_at).toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -321,4 +321,5 @@ export async function fetchCurrentNPK(): Promise<{
     throw error;
   }
 }
+
 
