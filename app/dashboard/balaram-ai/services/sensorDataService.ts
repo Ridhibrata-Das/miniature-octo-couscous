@@ -209,9 +209,9 @@ export async function fetchNPKData(timeRange: string = '24h'): Promise<NPKData[]
     const feeds = data.feeds || [];
     
     return feeds.map((feed: ThingSpeakResponse['feeds'][0]) => ({
-      nitrogen: parseNumericValue(feed.field4),
-      phosphorus: parseNumericValue(feed.field5),
-      potassium: parseNumericValue(feed.field6),
+      nitrogen: parseNumericValue(feed.field5),
+      phosphorus: parseNumericValue(feed.field6),
+      potassium: parseNumericValue(feed.field7),
       time: feed.created_at
     }));
   } catch (error) {
@@ -383,3 +383,4 @@ export function getFormattedSensorDataForAI(): string {
   const data = getCurrentSensorData();
   return `Location: ${data.location.locationName}, Humidity: ${data.weather.humidity}%, Soil Moisture: ${data.soilMoisture.soilMoisture}%, NPK: N=${data.npk.nitrogen}ppm, P=${data.npk.phosphorus}ppm, K=${data.npk.potassium}ppm`;
 }
+
