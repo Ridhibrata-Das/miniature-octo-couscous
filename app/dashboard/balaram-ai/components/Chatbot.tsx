@@ -10,7 +10,7 @@ const SYSTEM_PROMPT = `Speak with a helpful, funny and wise tone, that is very s
 export default function Chatbot() {
   const [messages, setMessages] = useState<{ type: 'human' | 'gemini', text: string, file?: File }[]>([]);
   const [input, setInput] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatService = useRef(new GeminiChatService()).current;
@@ -30,7 +30,7 @@ export default function Chatbot() {
       setMessages((prev) => [...prev, { type: "gemini", text: "Sorry, something went wrong." }]);
     }
     setInput("");
-    setFile(null);
+    setFile(undefined);
     setLoading(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
