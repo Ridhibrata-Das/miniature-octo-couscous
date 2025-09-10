@@ -8,12 +8,12 @@ export function Logo({ className }: { className?: string }) {
     <div className={cn("flex items-center gap-2", className)}>
       <Image 
         src="/Logo.jpeg" 
-        alt="Positron Logo" 
+        alt="E-Bhoomi Logo" 
         width={32} 
         height={32}
         className="rounded-md"
       />
-      <span className="font-semibold text-xl text-primary">Positron</span>
+      <span className="font-semibold text-xl text-primary">E-Bhoomi</span>
     </div>
   );
 }
