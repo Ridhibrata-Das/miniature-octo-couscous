@@ -322,4 +322,35 @@ export async function fetchCurrentNPK(): Promise<{
   }
 }
 
+export async function fetchLatestSensorData(): Promise<ThingSpeakResponse['feeds'][0] | null> {
+  try {
+    const THINGSPEAK_CHANNEL_ID = process.env.NEXT_PUBLIC_THINGSPEAK_CHANNEL_ID;
+    const THINGSPEAK_API_KEY = process.env.NEXT_PUBLIC_THINGSPEAK_READ_API_KEY;
 
+    if (!THINGSPEAK_CHANNEL_ID || !THINGSPEAK_API_KEY) {
+      console.error('ThingSpeak configuration missing');
+      return null;
+    }
+
+    const url = `https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?api_key=${THINGSPEAK_API_KEY}&results=1`;
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`ThingSpeak API error: ${response.status}`);
+    }
+
+    const data: ThingSpeakResponse = await response.json();
+    
+    if (!data.feeds || data.feeds.length === 0) {
+      console.warn('No sensor data available');
+      return null;
+    }
+
+    return data.feeds[0];
+
+  } catch (error) {
+    console.error('Error fetching latest sensor data:', error);
+    return null;
+  }
+}
