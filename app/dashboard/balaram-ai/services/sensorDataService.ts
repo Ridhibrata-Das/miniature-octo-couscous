@@ -383,4 +383,3 @@ export function getFormattedSensorDataForAI(): string {
   const data = getCurrentSensorData();
   return `Location: ${data.location.locationName}, Humidity: ${data.weather.humidity}%, Soil Moisture: ${data.soilMoisture.soilMoisture}%, NPK: N=${data.npk.nitrogen}ppm, P=${data.npk.phosphorus}ppm, K=${data.npk.potassium}ppm`;
 }
-

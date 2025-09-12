@@ -18,6 +18,7 @@ import {
 import { fetchThingSpeakHistory, fetchNPKData, type ThingSpeakData, type NPKData } from '@/lib/thingspeak';
 import { toast } from 'sonner';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Thermometer, Droplets, Gauge, Sun } from 'lucide-react';
 
 const timeRanges = [
   { value: '1h', label: 'Last Hour' },
@@ -37,6 +38,11 @@ export default function SensorsPage() {
   const [isToggling, setIsToggling] = useState(false);
 
   const latestSoilMoisture = sensorHistory.length > 0 ? sensorHistory[sensorHistory.length - 1].soilMoisture : undefined;
+  const latestTemperature = sensorHistory.length > 0 ? sensorHistory[sensorHistory.length - 1].temperature : undefined;
+  const latestHumidity = sensorHistory.length > 0 ? sensorHistory[sensorHistory.length - 1].humidity : undefined;
+  const latestNpkAvg = npkHistory.length > 0
+    ? ((npkHistory[npkHistory.length - 1].nitrogen + npkHistory[npkHistory.length - 1].phosphorus + npkHistory[npkHistory.length - 1].potassium) / 3)
+    : undefined;
 
   const readPumpState = async () => {
     try {
@@ -127,12 +133,51 @@ export default function SensorsPage() {
   }, [modeAutomatic, pumpState, latestSoilMoisture]);
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Sensor Readings</h1>
-      </div>
+    <div className="p-6 md:p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-green-600 via-green-700 to-blue-600 rounded-xl p-6 text-white shadow-lg flex items-center justify-between min-h-[100px]">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold">Sensor Analytics</h1>
+            <p className="opacity-90 mt-1">Explore historical trends and real-time readings</p>
+          </div>
+          <div className="hidden md:flex items-center gap-3">
+            <Select value={selectedRange} onValueChange={setSelectedRange}>
+              <SelectTrigger className="w-[180px] bg-white/10 text-white border-white/30">
+                <SelectValue placeholder="Select time range" />
+              </SelectTrigger>
+              <SelectContent>
+                {timeRanges.map((range) => (
+                  <SelectItem key={range.value} value={range.value}>
+                    {range.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 gap-8">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: 'Temperature', value: latestTemperature !== undefined ? `${latestTemperature.toFixed(1)}°C` : '—', icon: Thermometer, color: 'blue' },
+            { label: 'Humidity', value: latestHumidity !== undefined ? `${latestHumidity.toFixed(1)}%` : '—', icon: Droplets, color: 'green' },
+            { label: 'Soil Moisture', value: latestSoilMoisture !== undefined ? `${latestSoilMoisture.toFixed(1)}%` : '—', icon: Gauge, color: 'purple' },
+            { label: 'Avg NPK', value: latestNpkAvg !== undefined ? `${latestNpkAvg.toFixed(0)} ppm` : '—', icon: Sun, color: 'yellow' },
+          ].map((m) => (
+            <div key={m.label} className={`bg-white p-5 rounded-xl shadow-sm border-l-4 border-${m.color}-500`}>
+              <div className="flex justify-between">
+                <div>
+                  <p className="text-sm opacity-70">{m.label}</p>
+                  <div className="text-2xl font-bold">{m.value}</div>
+                </div>
+                <m.icon className={`h-8 w-8 text-${m.color}-500`} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-8">
         {/* Pump Control */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
@@ -340,5 +385,6 @@ export default function SensorsPage() {
         </Card>
       </div>
     </div>
+  </div>
   );
 }

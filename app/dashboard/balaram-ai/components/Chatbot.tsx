@@ -60,7 +60,7 @@ export default function Chatbot() {
         {loading && (
           <div className="flex justify-start">
             <div className="max-w-xs rounded-lg px-4 py-2 shadow bg-blue-50 text-left animate-pulse">
-              Gemini is typing...
+              Balaram AI is typing...
             </div>
           </div>
         )}
